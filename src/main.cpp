@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <chrono>
-#include "TetrisGame.h"
+#include "BlockDropGame.h"
 #include "Renderer.h"
 
 int main() {
@@ -11,7 +11,7 @@ int main() {
         return 1;
     }
     
-    TetrisGame game;
+    BlockDropGame game;
     
     bool running = true;
     auto lastTime = std::chrono::high_resolution_clock::now();

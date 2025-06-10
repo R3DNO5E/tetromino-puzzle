@@ -3,7 +3,7 @@
 #include <array>
 #include <random>
 
-class TetrisGame {
+class BlockDropGame {
 public:
     static const int BOARD_WIDTH = 10;
     static const int BOARD_HEIGHT = 20;
@@ -40,7 +40,7 @@ private:
     std::mt19937 rng;
     
 public:
-    TetrisGame();
+    BlockDropGame();
     
     void newPiece();
     bool checkCollision(int dx = 0, int dy = 0, int rotation = -1) const;

@@ -1,8 +1,8 @@
-#include "TetrisGame.h"
+#include "BlockDropGame.h"
 #include <algorithm>
 #include <chrono>
 
-TetrisGame::TetrisGame() 
+BlockDropGame::BlockDropGame() 
     : board(BOARD_HEIGHT, std::vector<int>(BOARD_WIDTH, 0))
     , currentPiece(TetrominoType::I)
     , currentX(0), currentY(0), currentRotation(0)
@@ -15,7 +15,7 @@ TetrisGame::TetrisGame()
     newPiece();
 }
 
-void TetrisGame::initializeTetrominoes() {
+void BlockDropGame::initializeTetrominoes() {
     // I piece
     tetrominoes[0].rotations = {
         {".....", "..#..", "..#..", "..#..", "..#.."},
@@ -64,7 +64,7 @@ void TetrisGame::initializeTetrominoes() {
     };
 }
 
-void TetrisGame::newPiece() {
+void BlockDropGame::newPiece() {
     std::uniform_int_distribution<int> dist(0, static_cast<int>(TetrominoType::COUNT) - 1);
     currentPiece = static_cast<TetrominoType>(dist(rng));
     currentRotation = 0;
@@ -85,11 +85,11 @@ void TetrisGame::newPiece() {
     }
 }
 
-const std::array<std::string, TetrisGame::PIECE_SIZE>& TetrisGame::getCurrentPieceShape() const {
+const std::array<std::string, BlockDropGame::PIECE_SIZE>& BlockDropGame::getCurrentPieceShape() const {
     return tetrominoes[static_cast<int>(currentPiece)].rotations[currentRotation];
 }
 
-bool TetrisGame::checkCollision(int dx, int dy, int rotation) const {
+bool BlockDropGame::checkCollision(int dx, int dy, int rotation) const {
     if (rotation == -1) {
         rotation = currentRotation;
     }
@@ -113,7 +113,7 @@ bool TetrisGame::checkCollision(int dx, int dy, int rotation) const {
     return false;
 }
 
-void TetrisGame::placePiece() {
+void BlockDropGame::placePiece() {
     const auto& pieceShape = getCurrentPieceShape();
     
     for (int y = 0; y < PIECE_SIZE; y++) {
@@ -129,7 +129,7 @@ void TetrisGame::placePiece() {
     }
 }
 
-void TetrisGame::clearLines() {
+void BlockDropGame::clearLines() {
     std::vector<int> linesToClear;
     
     for (int y = 0; y < BOARD_HEIGHT; y++) {
@@ -160,7 +160,7 @@ void TetrisGame::clearLines() {
     }
 }
 
-bool TetrisGame::movePiece(int dx, int dy) {
+bool BlockDropGame::movePiece(int dx, int dy) {
     if (!checkCollision(dx, dy)) {
         currentX += dx;
         currentY += dy;
@@ -169,14 +169,14 @@ bool TetrisGame::movePiece(int dx, int dy) {
     return false;
 }
 
-void TetrisGame::rotatePiece() {
+void BlockDropGame::rotatePiece() {
     int newRotation = (currentRotation + 1) % tetrominoes[static_cast<int>(currentPiece)].rotations.size();
     if (!checkCollision(0, 0, newRotation)) {
         currentRotation = newRotation;
     }
 }
 
-void TetrisGame::dropPiece() {
+void BlockDropGame::dropPiece() {
     if (!movePiece(0, 1)) {
         placePiece();
         clearLines();
@@ -184,14 +184,14 @@ void TetrisGame::dropPiece() {
     }
 }
 
-void TetrisGame::hardDrop() {
+void BlockDropGame::hardDrop() {
     while (movePiece(0, 1)) {
         // Keep dropping
     }
     dropPiece();
 }
 
-int TetrisGame::getGhostY() const {
+int BlockDropGame::getGhostY() const {
     int ghostY = currentY;
     while (!checkCollision(0, ghostY - currentY + 1)) {
         ghostY++;
@@ -199,7 +199,7 @@ int TetrisGame::getGhostY() const {
     return ghostY;
 }
 
-double TetrisGame::evaluateBoard() const {
+double BlockDropGame::evaluateBoard() const {
     double score = 0.0;
     
     // Calculate column heights
@@ -318,7 +318,7 @@ double TetrisGame::evaluateBoard() const {
     return score;
 }
 
-std::pair<int, int> TetrisGame::getBestMove() const {
+std::pair<int, int> BlockDropGame::getBestMove() const {
     double bestScore = -1e9;
     int bestX = currentX;
     int bestRotation = currentRotation;
@@ -331,18 +331,18 @@ std::pair<int, int> TetrisGame::getBestMove() const {
         // Expand search range to include positions where piece extends beyond left edge
         for (int x = -2; x <= BOARD_WIDTH + 1; x++) {
             // Simulate placement
-            const_cast<TetrisGame*>(this)->currentX = x;
-            const_cast<TetrisGame*>(this)->currentRotation = rotation;
-            const_cast<TetrisGame*>(this)->currentY = 0;
+            const_cast<BlockDropGame*>(this)->currentX = x;
+            const_cast<BlockDropGame*>(this)->currentRotation = rotation;
+            const_cast<BlockDropGame*>(this)->currentY = 0;
             
             // Check if this position is valid at the top
             if (!checkCollision()) {
                 int ghostY = getGhostY();
-                const_cast<TetrisGame*>(this)->currentY = ghostY;
+                const_cast<BlockDropGame*>(this)->currentY = ghostY;
                 
                 // Final collision check at ghost position
                 if (!checkCollision()) {
-                    const_cast<TetrisGame*>(this)->placePiece();
+                    const_cast<BlockDropGame*>(this)->placePiece();
                     double score = evaluateBoard();
                     
                     if (score > bestScore) {
@@ -352,7 +352,7 @@ std::pair<int, int> TetrisGame::getBestMove() const {
                     }
                     
                     // Restore board
-                    const_cast<TetrisGame*>(this)->board = oldBoard;
+                    const_cast<BlockDropGame*>(this)->board = oldBoard;
                 }
             }
         }
@@ -362,9 +362,9 @@ std::pair<int, int> TetrisGame::getBestMove() const {
     if (bestScore == -1e9) {
         for (size_t rotation = 0; rotation < tetrominoes[static_cast<int>(currentPiece)].rotations.size(); rotation++) {
             for (int x = -2; x <= BOARD_WIDTH + 1; x++) {
-                const_cast<TetrisGame*>(this)->currentX = x;
-                const_cast<TetrisGame*>(this)->currentRotation = rotation;
-                const_cast<TetrisGame*>(this)->currentY = 0;
+                const_cast<BlockDropGame*>(this)->currentX = x;
+                const_cast<BlockDropGame*>(this)->currentRotation = rotation;
+                const_cast<BlockDropGame*>(this)->currentY = 0;
                 
                 if (!checkCollision()) {
                     bestX = x;
@@ -377,14 +377,14 @@ std::pair<int, int> TetrisGame::getBestMove() const {
     }
     
     // Restore state
-    const_cast<TetrisGame*>(this)->currentX = oldX;
-    const_cast<TetrisGame*>(this)->currentY = oldY;
-    const_cast<TetrisGame*>(this)->currentRotation = oldRotation;
+    const_cast<BlockDropGame*>(this)->currentX = oldX;
+    const_cast<BlockDropGame*>(this)->currentY = oldY;
+    const_cast<BlockDropGame*>(this)->currentRotation = oldRotation;
     
     return {bestX, bestRotation};
 }
 
-void TetrisGame::autoPlayStep() {
+void BlockDropGame::autoPlayStep() {
     if (gameOver || autoPlayPositioned) return;  // Don't adjust if already positioned
     
     // Verify target position is still valid
@@ -426,7 +426,7 @@ void TetrisGame::autoPlayStep() {
     }
 }
 
-void TetrisGame::update(double deltaTime) {
+void BlockDropGame::update(double deltaTime) {
     if (gameOver) return;
     
     if (autoPlay && !autoPlayPositioned) {
@@ -461,7 +461,7 @@ void TetrisGame::update(double deltaTime) {
     }
 }
 
-void TetrisGame::handleInput(char key) {
+void BlockDropGame::handleInput(char key) {
     if (gameOver) return;
     
     if (key == 't' || key == 'T') {

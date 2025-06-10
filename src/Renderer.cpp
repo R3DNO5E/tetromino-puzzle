@@ -1,5 +1,5 @@
 #include "Renderer.h"
-#include "TetrisGame.h"
+#include "BlockDropGame.h"
 #include <iostream>
 
 Renderer::Renderer() : window(nullptr), renderer(nullptr), font(nullptr) {}
@@ -95,7 +95,7 @@ void Renderer::drawRect(int x, int y, int width, int height, bool filled) {
     }
 }
 
-void Renderer::drawGame(const TetrisGame& game) {
+void Renderer::drawGame(const BlockDropGame& game) {
     clear();
     
     drawBoard(game);
@@ -105,24 +105,24 @@ void Renderer::drawGame(const TetrisGame& game) {
     present();
 }
 
-void Renderer::drawBoard(const TetrisGame& game) {
+void Renderer::drawBoard(const BlockDropGame& game) {
     const auto& board = game.getBoard();
     
     // Draw board background
     setColor({32, 32, 32, 255});
     drawRect(BOARD_OFFSET_X - 2, BOARD_OFFSET_Y - 2, 
-             TetrisGame::BOARD_WIDTH * CELL_SIZE + 4, 
-             TetrisGame::BOARD_HEIGHT * CELL_SIZE + 4);
+             BlockDropGame::BOARD_WIDTH * CELL_SIZE + 4, 
+             BlockDropGame::BOARD_HEIGHT * CELL_SIZE + 4);
     
     // Draw board border
     setColor({255, 255, 255, 255});
     drawRect(BOARD_OFFSET_X - 2, BOARD_OFFSET_Y - 2, 
-             TetrisGame::BOARD_WIDTH * CELL_SIZE + 4, 
-             TetrisGame::BOARD_HEIGHT * CELL_SIZE + 4, false);
+             BlockDropGame::BOARD_WIDTH * CELL_SIZE + 4, 
+             BlockDropGame::BOARD_HEIGHT * CELL_SIZE + 4, false);
     
     // Draw board cells
-    for (int y = 0; y < TetrisGame::BOARD_HEIGHT; y++) {
-        for (int x = 0; x < TetrisGame::BOARD_WIDTH; x++) {
+    for (int y = 0; y < BlockDropGame::BOARD_HEIGHT; y++) {
+        for (int x = 0; x < BlockDropGame::BOARD_WIDTH; x++) {
             int cellValue = board[y][x];
             if (cellValue > 0) {
                 setColor(colors[cellValue]);
@@ -134,7 +134,7 @@ void Renderer::drawBoard(const TetrisGame& game) {
     }
 }
 
-void Renderer::drawCurrentPiece(const TetrisGame& game) {
+void Renderer::drawCurrentPiece(const BlockDropGame& game) {
     if (game.isGameOver()) return;
     
     const auto& pieceShape = game.getCurrentPieceShape();
@@ -142,16 +142,16 @@ void Renderer::drawCurrentPiece(const TetrisGame& game) {
     
     setColor(colors[pieceType]);
     
-    for (int y = 0; y < TetrisGame::PIECE_SIZE; y++) {
-        for (int x = 0; x < TetrisGame::PIECE_SIZE; x++) {
+    for (int y = 0; y < BlockDropGame::PIECE_SIZE; y++) {
+        for (int x = 0; x < BlockDropGame::PIECE_SIZE; x++) {
             if (pieceShape[y][x] == '#') {
                 int screenX = BOARD_OFFSET_X + (game.getCurrentX() + x) * CELL_SIZE;
                 int screenY = BOARD_OFFSET_Y + (game.getCurrentY() + y) * CELL_SIZE;
                 
                 if (screenX >= BOARD_OFFSET_X && 
-                    screenX < BOARD_OFFSET_X + TetrisGame::BOARD_WIDTH * CELL_SIZE &&
+                    screenX < BOARD_OFFSET_X + BlockDropGame::BOARD_WIDTH * CELL_SIZE &&
                     screenY >= BOARD_OFFSET_Y && 
-                    screenY < BOARD_OFFSET_Y + TetrisGame::BOARD_HEIGHT * CELL_SIZE) {
+                    screenY < BOARD_OFFSET_Y + BlockDropGame::BOARD_HEIGHT * CELL_SIZE) {
                     drawRect(screenX, screenY, CELL_SIZE - 1, CELL_SIZE - 1);
                 }
             }
@@ -159,8 +159,8 @@ void Renderer::drawCurrentPiece(const TetrisGame& game) {
     }
 }
 
-void Renderer::drawUI(const TetrisGame& game) {
-    int infoX = BOARD_OFFSET_X + TetrisGame::BOARD_WIDTH * CELL_SIZE + 20;
+void Renderer::drawUI(const BlockDropGame& game) {
+    int infoX = BOARD_OFFSET_X + BlockDropGame::BOARD_WIDTH * CELL_SIZE + 20;
     int infoY = BOARD_OFFSET_Y;
     
     setColor({255, 255, 255, 255});

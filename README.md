@@ -1,10 +1,10 @@
-# Tetromino Puzzle
+# BlockDrop
 
-A C++ implementation of Tetris with an advanced AI auto-play mode, built using SDL2 for cross-platform graphics.
+A C++ implementation of a falling blocks puzzle game with an advanced AI auto-play mode, built using SDL2 for cross-platform graphics.
 
 ## Features
 
-- **Classic Tetris Gameplay**: All 7 standard tetromino pieces (I, O, T, S, Z, J, L)
+- **Classic Falling Blocks Gameplay**: All 7 standard tetromino pieces (I, O, T, S, Z, J, L)
 - **Intelligent AI**: Advanced auto-play mode with safety-prioritized decision making
 - **Modern Graphics**: SDL2-based rendering with colorful piece visualization
 - **Progressive Difficulty**: Automatic level progression and speed increases
@@ -47,7 +47,7 @@ mkdir build
 cd build
 cmake ..
 make
-./tetris
+./blockdrop
 ```
 
 ## AI Algorithm
@@ -63,7 +63,7 @@ The AI ensures piece rotation and horizontal movement complete before allowing p
 
 ## Architecture
 
-- **TetrisGame** (`src/TetrisGame.cpp`): Core game logic, AI evaluation, and piece management
+- **BlockDropGame** (`src/BlockDropGame.cpp`): Core game logic, AI evaluation, and piece management
 - **Renderer** (`src/Renderer.cpp`): SDL2-based graphics and visual rendering
 - **main** (`src/main.cpp`): Game loop, input handling, and timing control
 
@@ -75,10 +75,10 @@ The AI ensures piece rotation and horizontal movement complete before allowing p
 ├── install_deps.sh         # Dependency installation script
 ├── include/                # Header files
 │   ├── Renderer.h
-│   └── TetrisGame.h
+│   └── BlockDropGame.h
 └── src/                    # Source files
     ├── Renderer.cpp
-    ├── TetrisGame.cpp
+    ├── BlockDropGame.cpp
     └── main.cpp
 ```
 

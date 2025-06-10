@@ -3,7 +3,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <string>
 
-class TetrisGame;
+class BlockDropGame;
 
 class Renderer {
 private:
@@ -39,12 +39,12 @@ public:
     void clear();
     void present();
     
-    void drawGame(const TetrisGame& game);
+    void drawGame(const BlockDropGame& game);
     
 private:
-    void drawBoard(const TetrisGame& game);
-    void drawCurrentPiece(const TetrisGame& game);
-    void drawUI(const TetrisGame& game);
+    void drawBoard(const BlockDropGame& game);
+    void drawCurrentPiece(const BlockDropGame& game);
+    void drawUI(const BlockDropGame& game);
     void drawText(const std::string& text, int x, int y);
     void setColor(const SDL_Color& color);
     void drawRect(int x, int y, int width, int height, bool filled = true);
