@@ -1,24 +1,25 @@
-# Tetris C++ SDL Implementation
+# Tetromino Puzzle
 
-A C++ port of the Python Tetris game using SDL2 for graphics and input handling.
+A C++ implementation of Tetris with an advanced AI auto-play mode, built using SDL2 for cross-platform graphics.
 
 ## Features
 
-- Classic Tetris gameplay with all 7 tetromino pieces (I, O, T, S, Z, J, L)
-- Real-time piece rotation and movement
-- Line clearing with scoring system
-- Progressive difficulty levels
-- Auto-play AI mode
-- SDL2-based GUI with colorful graphics
+- **Classic Tetris Gameplay**: All 7 standard tetromino pieces (I, O, T, S, Z, J, L)
+- **Intelligent AI**: Advanced auto-play mode with safety-prioritized decision making
+- **Modern Graphics**: SDL2-based rendering with colorful piece visualization
+- **Progressive Difficulty**: Automatic level progression and speed increases
+- **Responsive Controls**: Support for both WASD and arrow key inputs
 
 ## Controls
 
-- **A/D** or **←/→**: Move piece left/right
-- **S** or **↓**: Soft drop (move piece down faster)
-- **W** or **↑**: Rotate piece
-- **Space**: Hard drop (instantly drop piece to bottom)
-- **T**: Toggle auto-play mode
-- **Q**: Quit game
+| Key | Action |
+|-----|--------|
+| **A/D** or **←/→** | Move piece left/right |
+| **S** or **↓** | Soft drop (accelerated descent) |
+| **W** or **↑** | Rotate piece clockwise |
+| **Space** | Hard drop (instant placement) |
+| **T** | Toggle auto-play mode |
+| **Q** | Quit game |
 
 ## Building
 
@@ -28,60 +29,59 @@ A C++ port of the Python Tetris game using SDL2 for graphics and input handling.
 - CMake 3.16 or later
 - SDL2 development libraries
 
-### Ubuntu/Debian
+### Installation (Ubuntu/Debian)
 
 ```bash
-# Option 1: Install dependencies manually
+# Install dependencies
 sudo apt update
 sudo apt install build-essential cmake libsdl2-dev libsdl2-ttf-dev pkg-config
 
-# Option 2: Use provided script
+# Or use the provided script
 sudo ./install_deps.sh
 ```
 
-### Build Instructions
+### Build and Run
 
 ```bash
-cd tetris
 mkdir build
 cd build
 cmake ..
 make
-```
-
-**Note**: If you don't have sudo access, you may need to install SDL2 through other means or ask your system administrator to install the development libraries.
-
-### Running
-
-```bash
 ./tetris
 ```
 
+## AI Algorithm
+
+The auto-play mode features a sophisticated evaluation function that prioritizes:
+
+1. **Game Over Prevention**: Extreme penalties for dangerous board heights
+2. **Line Clearing**: Rewards for completing horizontal lines
+3. **Board Safety**: Penalties for holes, uneven surfaces, and excessive height
+4. **Strategic Positioning**: Controlled piece placement with optimized timing
+
+The AI ensures piece rotation and horizontal movement complete before allowing piece descent, preventing premature drops that could lead to suboptimal placements.
+
 ## Architecture
 
-The implementation consists of three main components:
+- **TetrisGame** (`src/TetrisGame.cpp`): Core game logic, AI evaluation, and piece management
+- **Renderer** (`src/Renderer.cpp`): SDL2-based graphics and visual rendering
+- **main** (`src/main.cpp`): Game loop, input handling, and timing control
 
-- **TetrisGame**: Core game logic, piece management, collision detection, scoring
-- **Renderer**: SDL2-based graphics rendering, UI display
-- **main**: Game loop, input handling, timing
+## Project Structure
 
-## Game Features
+```
+├── CMakeLists.txt          # Build configuration
+├── README.md               # This file
+├── install_deps.sh         # Dependency installation script
+├── include/                # Header files
+│   ├── Renderer.h
+│   └── TetrisGame.h
+└── src/                    # Source files
+    ├── Renderer.cpp
+    ├── TetrisGame.cpp
+    └── main.cpp
+```
 
-- **Scoring**: Points awarded for line clears, multiplied by current level
-- **Levels**: Difficulty increases every 10 lines cleared
-- **Auto-play**: AI mode using board evaluation heuristics
-- **Collision Detection**: Accurate piece placement and boundary checking
-- **Line Clearing**: Full horizontal lines are cleared and board compacts
+## License
 
-The auto-play AI evaluates board positions using multiple factors:
-- Aggregate height penalty
-- Complete lines bonus  
-- Holes penalty
-- Bumpiness (height variation) penalty
-
-## Differences from Python Version
-
-- Uses SDL2 instead of curses for cross-platform GUI
-- Improved graphics with colored pieces
-- Better input handling with both WASD and arrow keys
-- More robust timing system using high-resolution clock
+This project is open source and available under standard terms.
