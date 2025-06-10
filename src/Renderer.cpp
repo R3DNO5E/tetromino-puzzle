@@ -19,7 +19,7 @@ bool Renderer::initialize() {
         return false;
     }
     
-    window = SDL_CreateWindow("Tetris",
+    window = SDL_CreateWindow("BlockDrop",
                              SDL_WINDOWPOS_UNDEFINED,
                              SDL_WINDOWPOS_UNDEFINED,
                              WINDOW_WIDTH,
